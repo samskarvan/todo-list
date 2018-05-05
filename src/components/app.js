@@ -4,7 +4,10 @@ import React, {Component} from 'react';
 import List from './list';
 import AddItem from './add-items';
 import listData from '../helpers/list_data';
+import axios from 'axios';
 
+const BASE_URL ='http://api.reactprototypes.com';
+const API_KEY = '?key=c118demouser';
 
 class App extends Component{
     constructor(props){
@@ -18,13 +21,24 @@ class App extends Component{
     componentDidMount(){
         this.getListData();
     }
-    getListData(){
-        setTimeout(()=>{
-            this.setState({listData: listData});
-        }, 400); 
+    async getListData(){
+        const response = await axios.get(`${BASE_URL}/todos${API_KEY}`);
+
+        this.setState({listData:response.data.todos});
+
+        // axios.get(`${BASE_URL}/todos${API_KEY}`).then(res=>{
+        //     console.log(res.data.todos);
+
+        //     this.setState({listData: res.data.todos});
+        // })
     }
     addItem(item){
-        this.setState({listData:[item, ...this.state.listData]})
+        try{
+        this.setState({listData:[item, ...this.state.listData]});
+        }catch(err){
+            console.log('error:', err.message);
+        }
+
     }
 
     deleteItem(index){
