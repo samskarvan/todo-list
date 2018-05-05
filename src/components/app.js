@@ -7,7 +7,7 @@ import listData from '../helpers/list_data';
 import axios from 'axios';
 
 const BASE_URL ='http://api.reactprototypes.com';
-const API_KEY = '?key=c118demouser';
+const API_KEY = '?key=c318samskarvan';
 
 class App extends Component{
     constructor(props){
@@ -32,21 +32,19 @@ class App extends Component{
         //     this.setState({listData: res.data.todos});
         // })
     }
-    addItem(item){
-        try{
-        this.setState({listData:[item, ...this.state.listData]});
-        }catch(err){
-            console.log('error:', err.message);
-        }
-
+    async addItem(item){
+       await axios.post(`${BASE_URL}/todos${API_KEY}`, item);
+       this.getListData();
     }
 
-    deleteItem(index){
-        const listData = this.state.listData.slice();
+    async deleteItem(id){
+        await axios.delete(`${BASE_URL}/todos/${id+API_KEY}`);
+        this.getListData();
+        // const listData = this.state.listData.slice();
 
-        listData.splice(index,1);
+        // listData.splice(index,1);
 
-        this.setState({listData});
+        // this.setState({listData});s
     }
     render(){
         return(
